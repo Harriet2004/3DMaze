@@ -21,14 +21,24 @@ class WallFollowingMazeSolver(MazeSolver):
         self.m_name = "wall"
         # Define direction vectors
         self.directions = {
-            'NORTH': Coordinates3D(0, 1, 0),
+            'NORTH': Coordinates3D(0, 0, -1),
             'NORTH_EAST': Coordinates3D(1, 0, 0),
-            'EAST': Coordinates3D(0, 0, 1),
-            'SOUTH': Coordinates3D(0, -1, 0),
+            'EAST': Coordinates3D(0, 1, 0),
+            'SOUTH': Coordinates3D(0, 0, 1),
             'SOUTH_WEST': Coordinates3D(-1, 0, 0),
-            'WEST': Coordinates3D(0, 0, -1),
+            'WEST': Coordinates3D(0, -1, 0),
         }
         self.direction_order = ['NORTH', 'NORTH_EAST', 'EAST' , 'SOUTH', 'SOUTH_WEST', 'WEST']
+
+    def rotateRight(self, direction, counter):
+        current_index = self.direction_order.index(direction)
+        next_index = (current_index + counter) % len(self.direction_order)
+        return self.direction_order[next_index]
+    
+    def rotateLeft(self, direction, counter):
+        current_index = self.direction_order.index(direction)
+        next_index = (current_index - counter) % len(self.direction_order)
+        return self.direction_order[next_index]
 
     def solveMaze(self, maze: Maze3D, entrance: Coordinates3D):
         self.m_solved = False
@@ -45,26 +55,19 @@ class WallFollowingMazeSolver(MazeSolver):
 
             # Neighbours that can be visited (non-walls)
             possibleNeighs: list[Coordinates3D] = [ neigh for neigh in neighbours if not maze.hasWall(currCell, neigh) and \
-                                                   (neigh.getRow() >= 0) and (neigh.getRow() <= maze.rowNum(neigh.getLevel())) \
-                                                    and (neigh.getCol() >= 0) and (neigh.getCol() <= maze.colNum(neigh.getLevel())) ]
+                                                   (neigh.getRow() >= -1) and (neigh.getRow() <= maze.rowNum(neigh.getLevel())) \
+                                                    and (neigh.getCol() >= -1) and (neigh.getCol() <= maze.colNum(neigh.getLevel())) ]
 
 
             # # Get opposite direction (which cell you came from)
-            current_index = self.direction_order.index(currDirection)
-            next_index = (current_index + 3) % len(self.direction_order)
-            currDirection = self.direction_order[next_index]
+            currDirection = self.rotateRight(currDirection,3)
 
             # Check wall one rotation to the left
-            current_index = self.direction_order.index(currDirection)
-            next_index = (current_index - 1) % len(self.direction_order)
-            currDirection = self.direction_order[next_index]
+            currDirection = self.rotateLeft(currDirection,1)
             # While cannot move forward
             while (currCell + self.directions[currDirection]) not in possibleNeighs:
                 # Check wall one rotation to the left
-                current_index = self.direction_order.index(currDirection)
-                next_index = (current_index - 1) % len(self.direction_order)
-                currDirection = self.direction_order[next_index]
-
+                currDirection = self.rotateLeft(currDirection,1)
             # Move forward if there is no wall
             currCell = currCell + self.directions[currDirection]
 
