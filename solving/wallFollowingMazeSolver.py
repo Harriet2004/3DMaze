@@ -30,14 +30,9 @@ class WallFollowingMazeSolver(MazeSolver):
         }
         self.direction_order = ['NORTH', 'NORTH_EAST', 'EAST' , 'SOUTH', 'SOUTH_WEST', 'WEST']
 
-    def rotateRight(self, direction, counter):
+    def rotate(self, direction, count):
         current_index = self.direction_order.index(direction)
-        next_index = (current_index + counter) % len(self.direction_order)
-        return self.direction_order[next_index]
-    
-    def rotateLeft(self, direction, counter):
-        current_index = self.direction_order.index(direction)
-        next_index = (current_index - counter) % len(self.direction_order)
+        next_index = (current_index - count) % len(self.direction_order)
         return self.direction_order[next_index]
 
     def solveMaze(self, maze: Maze3D, entrance: Coordinates3D):
@@ -60,14 +55,14 @@ class WallFollowingMazeSolver(MazeSolver):
 
 
             # # Get opposite direction (which cell you came from)
-            currDirection = self.rotateRight(currDirection,3)
+            currDirection = self.rotate(currDirection,3)
 
             # Check wall one rotation to the left
-            currDirection = self.rotateLeft(currDirection,1)
+            currDirection = self.rotate(currDirection,1)
             # While cannot move forward
             while (currCell + self.directions[currDirection]) not in possibleNeighs:
                 # Check wall one rotation to the left
-                currDirection = self.rotateLeft(currDirection,1)
+                currDirection = self.rotate(currDirection,1)
             # Move forward if there is no wall
             currCell = currCell + self.directions[currDirection]
 
