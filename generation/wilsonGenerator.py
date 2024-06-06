@@ -26,7 +26,7 @@ class WilsonMazeGenerator(MazeGenerator):
         startCoord = Coordinates3D(startLevel, randint(0, maze.rowNum(startLevel) - 1), randint(0, maze.colNum(startLevel) - 1))
 
         
-        finalised : set[Coordinates3D] = set([startCoord]) #creating a finalsed set which contains the cells that are all visited and finalised
+        finalised : set[Coordinates3D] = set([startCoord]) #creating a finalised set which contains the cells that are all visited and finalised
         unvisited : set[Coordinates3D] = set() #creating an unvisited set to choose the cells from and later mark them finalised.
         #making nested for loops so that each cell of the maze can be added to the unvisited set.
         for level in range(maze.levelNum()):
