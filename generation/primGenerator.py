@@ -19,6 +19,7 @@ class PrimMazeGenerator(MazeGenerator):
     """
 
     def generateMaze(self, maze: Maze3D):
+        # make sure we start the maze with all walls there
         maze.initCells(True)
 
         # select starting cell 
