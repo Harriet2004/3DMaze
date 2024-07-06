@@ -21,12 +21,12 @@ class WallFollowingMazeSolver(MazeSolver):
         self.m_name = "wall"
         # Defining directions that are going to be used
         self.directions = {
-            'NORTH': Coordinates3D(0, 0, -1),
+            'NORTH': Coordinates3D(0, 1, 0),
             'NORTH_EAST': Coordinates3D(1, 0, 0),
-            'EAST': Coordinates3D(0, 1, 0),
-            'SOUTH': Coordinates3D(0, 0, 1),
+            'EAST': Coordinates3D(0, 0, 1),
+            'SOUTH': Coordinates3D(0, -1, 0),
             'SOUTH_WEST': Coordinates3D(-1, 0, 0),
-            'WEST': Coordinates3D(0, -1, 0),
+            'WEST': Coordinates3D(0, 0, -1),
         }
         # The order of directions for the solver to refer to
         self.direction_order = ['NORTH', 'NORTH_EAST', 'EAST' , 'SOUTH', 'SOUTH_WEST', 'WEST']
@@ -46,14 +46,17 @@ class WallFollowingMazeSolver(MazeSolver):
         Returns
         -------
         Coordinates3D
-            The direction after the number of turns are taken, if the current direction is 'NORTH' and the number of turns are 3 (for a 180 degree turn),
-            this function will return 'SOUTH'.
+            The direction after the number of turns are taken.
         """
         current_index = self.direction_order.index(direction) #grabs the current index of the current direction from the directions list
         next_index = (current_index - count) % len(self.direction_order) # calculate the number of turns from the current index and assigns to the next index
         return self.direction_order[next_index]
 
     def solveMaze(self, maze: Maze3D, entrance: Coordinates3D):
+        """
+        In this wall follower, we are turning left so we are following right hand wall follower
+        """
+
         self.m_solved = False 
         	
         # select starting cell

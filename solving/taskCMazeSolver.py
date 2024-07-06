@@ -23,12 +23,12 @@ class TaskCMazeSolver(MazeSolver):
         super().__init__()
         self.m_name = "taskC"
         self.directions = {
-            'NORTH': Coordinates3D(0, 0, -1),
+            'NORTH': Coordinates3D(0, 1, 0),
             'NORTH_EAST': Coordinates3D(1, 0, 0),
-            'EAST': Coordinates3D(0, 1, 0),
-            'SOUTH': Coordinates3D(0, 0, 1),
+            'EAST': Coordinates3D(0, 0, 1),
+            'SOUTH': Coordinates3D(0, -1, 0),
             'SOUTH_WEST': Coordinates3D(-1, 0, 0),
-            'WEST': Coordinates3D(0, -1, 0),
+            'WEST': Coordinates3D(0, 0, -1),
         }
         self.direction_order = ['NORTH', 'NORTH_EAST', 'EAST' , 'SOUTH', 'SOUTH_WEST', 'WEST']
 
@@ -94,7 +94,7 @@ class TaskCMazeSolver(MazeSolver):
                 uniquePath.append(cell) # Adding the cell into the unique path if it does not exist in it
         return len(uniquePath)
     
-    def pathsFromEntrance(self, entrance: Coordinates3D, maze: Maze3D, paths: list[list[Coordinates3D]]):
+    def getPathFromEachEntrance(self, entrance: Coordinates3D, maze: Maze3D, paths: list[list[Coordinates3D]]):
         """
         This function is used to get the paths/path from a particular entrance
         Parameters
@@ -143,7 +143,7 @@ class TaskCMazeSolver(MazeSolver):
                 
         return paths 
     
-    def findMinPath(self, paths: list[list[Coordinates3D]], maze: Maze3D):
+    def getShortestPath(self, paths: list[list[Coordinates3D]], maze: Maze3D):
         """
         This function is used to find the path with all additional cells remove. Additional cells here means that if the wall follower goes through
         a loop, the cells of the loop will be removed and a new path will be formed. Then the function will find the number of cells of the path 
@@ -162,8 +162,8 @@ class TaskCMazeSolver(MazeSolver):
         smallPath: list[Coordinates3D] = list() # Having a list to store the smallest path (least number of cells)
 
         for path in paths:
-            loopFreePath = self.removeLoops(path) # Calling the function to remove the loops
-            cellsOfPath = self.uniqueCount(loopFreePath) # Counting the number of unique cells in the path
+            loopFreePath = self.loopRemover(path) # Calling the function to remove the loops
+            cellsOfPath = self.getCountOfUniqueCells(loopFreePath) # Counting the number of unique cells in the path
             # This prints the path and the number of cells in the terminal
             print('Entrance:', loopFreePath[0], 'Exit:', loopFreePath[-1], 'with cells:', cellsOfPath)
 
@@ -174,7 +174,7 @@ class TaskCMazeSolver(MazeSolver):
         return smallPath
 
 
-    def removeLoops(self, path: list[Coordinates3D]):
+    def loopRemover(self, path: list[Coordinates3D]):
         """
         This function is used to remove the loops of the particular path. For an solver like wall follower, it can go through the same cell twice
         depending on which wall it follows. So if there are loops, it will remove it to find the number of unique cells
@@ -199,7 +199,7 @@ class TaskCMazeSolver(MazeSolver):
 
         return loopFreePath
     
-    def uniqueCount(self, path: list[Coordinates3D]):
+    def getCountOfUniqueCells(self, path: list[Coordinates3D]):
         """
         This function is used to find the number of unique cells explored
         Parameters
@@ -219,7 +219,7 @@ class TaskCMazeSolver(MazeSolver):
                 
         return len(temp)
     
-    def solveMaze(self, maze: Maze3D, entrance: Coordinates3D):
+    def solveMaze(self, maze: Maze3D):
         # we call the the solve maze call without the entrance.
         # DO NOT CHANGE THIS METHOD
         self.solveMazeTaskC(maze)
@@ -234,10 +234,10 @@ class TaskCMazeSolver(MazeSolver):
         
         # For each entrance of the maze, finding a path from it to the exit of the maze and adding it to the main list of mazePaths
         for entrance in mazeEntrances:
-            mazePaths + [self.pathsFromEntrance(entrance,maze,mazePaths)]
+            mazePaths + [self.getPathFromEachEntrance(entrance,maze,mazePaths)]
 
         # Finding the path with the least number of cells and declaring that as the path that has been used to solve the maze
-        minPath = self.findMinPath(mazePaths,maze)
+        minPath = self.getShortestPath(mazePaths,maze)
         print("The path with the least number of cells is:", len(minPath))
 
         for currCell in minPath:
