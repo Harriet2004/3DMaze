@@ -1,0 +1,9 @@
+{
+    "levelSpecs": [[50,50],[50,50],[50,50]],
+    "entrances": [[0,-1,0]],
+    "exits": [[1,50,0]],
+    "generator": "recur",
+    "solver": "recur",
+    "solverEntranceIndex": 0,
+    "visualise": true
+}
