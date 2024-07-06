@@ -1,0 +1,9 @@
+{
+    "levelSpecs": [[3,10],[3,10],[3,10]],
+    "entrances": [[0,-1,0],[1,1,10]],
+    "exits": [[1,-1,0],[2,3,2]],
+    "generator": "recur",
+    "solver": "pledge",
+    "solverEntranceIndex": 0,
+    "visualise": true
+}
