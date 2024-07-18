@@ -11,7 +11,6 @@ from generation.mazeGenerator import MazeGenerator
 from generation.recurBackGenerator import RecurBackMazeGenerator
 from generation.primGenerator import PrimMazeGenerator
 from generation.wilsonGenerator import WilsonMazeGenerator
-from generation.taskDMazeGenerator import TaskDMazeGenerator
 from solving.mazeSolver import MazeSolver
 
 
